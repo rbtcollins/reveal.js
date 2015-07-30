@@ -1,3 +1,10 @@
+### Schedule delayed by 20m
+For all stream until lunch.
+
+Starting at 0920
+
+
+
 ## Welcome
 
 * Robert Collins  @rbtcollins (Twitter)
@@ -46,9 +53,34 @@ Linked from PyCon AU FAQ
 
 
 
+
+## Morning tea
+
+Connaught and King George rooms.
+
+If there are sessions running, go via foyer.
+
+If not, go through kennedy and roosevelt.
+
+
 ## Schedule
 
 On the PyCon AU website
+
+
+
+## Lightning talks
+signup by tweeting @tonybreeds
+
+
+
+
+## Extra credit
+LCA CFP closes sunday night.
+
+If bored write up a proposal!
+
+https://linux.conf.au/cfp
 
 
 
