@@ -91,3 +91,22 @@ https://linux.conf.au/cfp
 Monty Taylor
 Note:
 Foundation board member, TC member, HP DT
+
+
+
+## Closing
+
+
+
+## Thank you for coming
+
+
+
+## Feedback
+
+* Robert Collins  rbtcollins@hp.com
+* Joshua Hesketh  josh@nitrotech.org
+
+
+
+## Next year?
