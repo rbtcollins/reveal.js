@@ -1,7 +1,7 @@
 ## Welcome
 
 * Robert Collins  @rbtcollins (Twitter)
-* Joshua Hesketh  
+* Joshua Hesketh  josh@nitrotech.org (Email)
 
 
 
