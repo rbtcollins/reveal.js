@@ -36,3 +36,6 @@ $selectionBackgroundColor: rgba(0, 0, 0, 0.99);
 // Theme template ------------------------------
 @import "../template/theme";
 // ---------------------------------------------
+.reveal pre {
+    font-size: 100%;
+}
