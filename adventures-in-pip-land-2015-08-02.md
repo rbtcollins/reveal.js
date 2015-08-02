@@ -81,6 +81,8 @@ be afraid
 * isolated directories
 * virtual environments
 * as eggs[*]
+Note:
+Deprecated, oh so deprecated
 
 
 ## Installs itself
