@@ -44,3 +44,15 @@ Run tests via python -m testtool.run 05.py
 Simple effect based echo with effect.testing tests.
 
 Run tests via python -m testtool.run 06.py
+
+## 07.py
+
+Generator notation.
+
+Run tests via python -m testtool.run 07.py
+
+## 08.py
+
+Loops.
+
+Run tests via python -m testtool.run 08.py

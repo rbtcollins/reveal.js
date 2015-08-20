@@ -9,10 +9,6 @@ rbtcollins@hp.com
 
 
 
-## PREVIEW EDITION
-
-
-
 ## Chris Armstrong
 
 @radix
@@ -25,11 +21,12 @@ https://pypi.python.org/pypi/effect
 https://github.com/python-effect/effect
 
 
-## Motivation
+## Motivation 1
 
 note:
-Bug free code
-Testing of same code
+code with predictable behaviours
+Fast/Easy testing of same code
+Reliable testing of same code (purity)
 
 
 Whats wrong with this code?
@@ -77,6 +74,13 @@ note:
 6. **global**
 
 
+## Testing this code?
+
+1. Monkeypatching <!-- .element: class="fragment" -->
+2. Subprocesses <!-- .element: class="fragment" -->
+3. IO Redirection <!-- .element: class="fragment" -->
+
+
 How might we fix this?
 
 
@@ -102,6 +106,8 @@ echo $?
 1
 ```
 
+
+Testing is still undesirable
 
 
 ## Haskell
@@ -142,8 +148,10 @@ action1 >>=
     \ x2 -> action3 x1 x2
 ```
 
+\>\>= is an infix function called bind.
 
-## Python
+
+## Python transliteration
 
 ```
 def _1(x1):
@@ -159,39 +167,35 @@ Beep, wrong
 
 ## Type inference
 
-\>\>= is polymorphic on its left hand argument
+\>\>= is polymorphic on its left hand argument. We are missing the monad.
 
 
 ```
 class Monad:
-    def __init__(self, f_or_v):
-        if isinstance(f_or_v, Monad):
-            f_or_v = f_or_v.f_or_v
-        self.f_or_v = f_or_v
+    def __init__(self, v):
+        self.v = v
     def bind(self, f):
-        return self.unit(f(self, self.f_or_v))
-    def unit(self, f_or_v):
-        return self.__class__(f_or_v)
+        return f(self, self.v)
+    def unit(self, v):
+        return self.__class__(v)
 ```
 
 
 ```
-def action1(m) -> Monad: return m.unit(1)
-def action2(m) -> Monad: return m.unit(2)
-def action3(m, x,y) -> Monad: return m.unit(x+y)
+def action1(m): return m.unit(1)
+def action2(m): return m.unit(2)
+def action3(m, x, y): return m.unit(x+y)
 ```
 
 
 ```
-def r(f): return f.__annotations__['return']
-
-m = Monad(None)
 def _1(m1, x1):
     def _2(m2, x2):
         return action3(m2, x1, x2)
     return action2(m1).bind(_2)
+m = Monad(None)
 lastline = action1(m).bind(_1)
-print(lastline.f_or_v)
+print(lastline.v)
 ```
 
 
@@ -213,7 +217,7 @@ http://www.haskellforall.com/2012/07/purify-code-using-free-monads.html
 approximated in Python by @radix
 
 note:
-I have no idea whether Chris had read that post or not
+Chris had read that and it may or may not be part of the inspiration for Effect.
 
 
 
@@ -239,6 +243,9 @@ def program():
     return Effect(Print('What... is your quest?'))
 ```
 
+1. Return generators or Effects
+2. Functions accept a single parameter
+
 
 ## Write an interpreter
 
@@ -247,16 +254,16 @@ def program():
 def real_print(dispatcher, print_):
     print(print_.line)
     sys.stdout.flush()
-```
 
-
-```
 real_interpreter = ComposedDispatcher([
     TypeDispatcher({
         Print: real_print,
         }),
     base_dispatcher])
 ```
+
+note:
+We have split out business logic and things that must be impure
 
 
 
@@ -269,37 +276,40 @@ real_interpreter = ComposedDispatcher([
 def test_print(self):
     outputs = []
     @sync_performer
-    def test_print(dispatcher, print_):
+    def perform_test(dispatcher, print_):
         outputs.append(print_.line)
 ```
 
-Cannot assert here
+Cannot assert here in the general case.
 
 
 ```
     test_interpreter = ComposedDispatcher([
         TypeDispatcher({
-            Print: test_print,
+            Print: perform_print,
             }),
         base_dispatcher])
-```
 
-
-```
     dispatcher = test_interpreter
     sync_perform(dispatcher, program())
     self.assertEqual(["What... is your quest?"], outputs)
-
 ```
 
 
-## Injecting values in is hard
+1. ~~Monkeypatching~~ <!-- .element: class="fragment" -->
+2. ~~Subprocessess~~ <!-- .element: class="fragment" -->
+3. ~~IO Redirection~~ <!-- .element: class="fragment" -->
 
-No affordances to facilitate this so far
+
+
+## We used the production API 
+
+Little awkward with closures etc.
 
 note:
-Arguably a design defect (see the free monad blog post in haskell)
-
+Arguably a design defect (see the free monad blog post in haskell) - being able
+to pass a RealWorld equivalent in would allow each test interpeter to be
+independent without closures.
 
 
 ## Dedicated testing API
@@ -324,6 +334,9 @@ def test_print(self):
 ```
 Print = namedtuple("Print", "line")
 ```
+
+note:
+Named tuples because SequenceDispatcher uses equality.
 
 
 ```
@@ -366,35 +379,65 @@ def test_echo(self, line):
 
 
 
-Remaining plans
-
-1. bigger example, for loop and actual logic
-1. perf tests?
-1. time check
+## What about loops etc?
 
 
-##
-functors
-
-map over a context
-fmap :: (a -> b) -> f a -> f b
+## And Now for Something Completely Different
 
 
-identity 
+```
+from effect.do import do
+...
+@do
+def echo():
+  yield Effect(Print('What... is your quest?'))
+  line = yield Effect(Readline())
+  yield Effect(Print(line))
+```
 
 
-**The code finishes before the job is finished**
+```
+with sequence.consume():
+  dispatcher = ComposedDispatcher([
+  sequence,
+  base_dispatcher,
+  ])
+  sync_perform(dispatcher, echo())
+```
 
 
 
-# Original abstract
-'everyone' knows that separating out IO and other side effects makes code easier to unit test. What if there were a Python library that helps do that systematically which you could use to make all your things better? There is. Come and find out more.
+## Loops
 
-Chris Armstrong's Effect library is the library in question. I found this while digging into all the varied implementations of monads for Python (a generic concept that encapsulates the principle of IO and side effects) - and I'd like to share its beauty with other folk. Effect (https://pypi.python.org/pypi/effect) allows consistent separation of side effect (e.g. IO or even just global state changes) from the code that depends on those effects. Testing and reasoning about code becomes easier. But it can often be hard to get into such a system. Allow me to take you on a tour through how to change regular code into super testable code using Effect.
+```
+@do
+def challenge():
+    line = None
+    while line != 'To seek the Holy Grail.\n':
+        yield Effect(Print('What... is your quest?'))
+        line = yield Effect(Readline())
+    yield Effect(Print('What... is your favourite colour?'))
+```
+
+
+```
+@given(st.text())
+def test_challenge(self):
+    sequence = SequenceDispatcher([
+        (Print('What... is your quest?'), lambda _:None),
+        (Readline(), lambda _: line),
+        (Print('What... is your quest?'), lambda _:None),
+        (Readline(), lambda _:'To seek the Holy Grail.\n'),
+        (Print('What... is your favourite colour?'), lambda _:None),
+        ])
+```
 
 
 
 ## Questions?
+
+Example code: 
+https://github.com/rbtcollins/reveal.js/tree/master/effectsnippets
 
 * Robert Collins
 * @rbtcollins

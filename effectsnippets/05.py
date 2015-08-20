@@ -48,12 +48,12 @@ class Tests(testtools.TestCase):
     def test_print(self):
         outputs = []
         @sync_performer
-        def test_print(dispatcher, print_):
+        def perform_print(dispatcher, print_):
             outputs.append(print_.line)
 
         test_interpreter = ComposedDispatcher([
             TypeDispatcher({
-                Print: test_print,
+                Print: perform_print,
                 }),
             base_dispatcher])
 
