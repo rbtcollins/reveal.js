@@ -56,3 +56,9 @@ Run tests via python -m testtool.run 07.py
 Loops.
 
 Run tests via python -m testtool.run 08.py
+
+## 09.py
+
+Return values.
+
+Run tests via python -m testtool.run 09.py

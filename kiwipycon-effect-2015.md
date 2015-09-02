@@ -434,6 +434,37 @@ def test_challenge(self):
 
 
 
+## Returning from generators
+
+```
+from effect.do import do_return
+
+@do
+def challenge():
+    line = None
+    while line != 'To seek the Holy Grail.\n':
+        yield Effect(Print('What... is your quest?'))
+        line = yield Effect(Readline())
+    yield do_return(line)
+```
+
+
+```
+@given(st.text())
+def test_challenge(self):
+      sequence = [
+	  (Print('What... is your quest?'), lambda _:None),
+	  (Readline(), lambda _: line),
+	  (Print('What... is your quest?'), lambda _:None),
+	  (Readline(), lambda _:'To seek the Holy Grail.\n'),
+	  ]
+
+      result = perform_sequence(sequence, challenge())
+      self.assertEqual(result, 'To seek the Holy Grail.\n')
+```
+
+
+
 ## Questions?
 
 Example code: 
