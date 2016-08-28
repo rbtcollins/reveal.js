@@ -1,5 +1,6 @@
 /* global module:false */
 module.exports = function(grunt) {
+	var hostname = grunt.option('hostname') || '127.0.0.1';
 	var port = grunt.option('port') || 8000;
 	// Project configuration
 	grunt.initConfig({
@@ -80,6 +81,7 @@ module.exports = function(grunt) {
 		connect: {
 			server: {
 				options: {
+					hostname: hostname,
 					port: port,
 					base: '.'
 				}
