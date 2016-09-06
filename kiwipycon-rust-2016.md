@@ -12,7 +12,7 @@ robertc@vmware.com
 
 1. Rust is great <!-- .element: class="fragment" -->
 1. You can call it from Python <!-- .element: class="fragment" -->
-1. You can use it for Pytohn extension modules <!-- .element: class="fragment" -->
+1. You can use it for Python extension modules <!-- .element: class="fragment" -->
 1. It is enjoyable and productive <!-- .element: class="fragment" -->
 
 
