@@ -1,0 +1,19 @@
+[package]
+name = "demos"
+version = "0.1.0"
+authors = ["Robert Collins <robertc@robertcollins.net>"]
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+bytes = "0.3"
+env_logger = "0.3.4"
+futures = { git = "https://github.com/alexcrichton/futures-rs" }
+serde = "0.8"
+serde_json = "0.8"
+serde_macros = "0.8"
+tokio-hyper = { git = "https://github.com/nrc/tokio-hyper", rev="9768e66679811165547731a63c73dff6563ed030" }
+tokio-service = { git = "https://github.com/tokio-rs/tokio-service" }
+#tokio-hyper = { git = "https://github.com/tokio-rs/tokio-hyper" }
+hyper = "0"

@@ -1,0 +1,14 @@
+use std::cmp;
+
+fn fib(n: usize) -> u64 {
+    let mut fibs = vec![1, 1];
+    for pos in 0..cmp::max(n - 2, 0) {
+        let newval = fibs[pos] + fibs[pos + 1];
+        fibs.push(newval)
+    }
+    fibs[cmp::min(n - 1, fibs.len() - 1)]
+}
+
+fn main() {
+    println!("{}", fib(38))
+}
