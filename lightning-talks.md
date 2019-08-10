@@ -66,6 +66,21 @@ pip install -c constraints.txt projectname
 
 
 
+## How do you scale?
+
+* Convice other people to do things <!-- .element: class="fragment" -->
+* if everyone does this you end up with openstack
+
+## Things I wish I'd know when I started developing
+
+* Help folk understand the problem
+* Agree on the shape of the solution before the implementation of the solution
+* Delay deciding on everything you can until it actually matters
+* Let folk decide as much as they can themselves
+* automation is leverage. You only scale to the degree that you automate
+  things. Being fast at writing code is at most linear. Automate say testing or
+  deployments and you can replicate that 1000 times over.
+
 ## Questions?
 
 Slides https://github.com/rbtcollins/reveal.js/
